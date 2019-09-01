@@ -1,0 +1,122 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+void input(int l[50],int h[50],int n);
+void print(int matrix[50][50],int n,int count);
+void init(int matrix[50][50],int n);
+int max(int a[50],int b[50],int i);
+void comp(int matrix[50][50],int n);
+int check(int matrix[50][50],int y[50],int s[50],int i,int count);
+
+void main()
+{
+  int a[50],b[50],matrix[50][50],n,i,j,c,count=0;
+  printf("Enter the number of minutes\n");
+  scanf("%d",&n);
+  input(a,b,n);
+  init(matrix,n);
+
+  for(i=1;i<=n;i++)
+  {    
+       for(j=1;j<=n;j++)
+     {
+       if(i==j)
+       {
+         c=max(a,b,i);
+         if(matrix[i-1][i-1]-matrix[i-2][i-2]==a[i-1]&&c==a[i])
+           {
+              matrix[i][j]=matrix[i-1][j]+c;
+           }
+         else if(matrix[i-1][i-1]-matrix[i-2][i-2]==b[i-1]&&c==b[i])
+           {
+              matrix[i][j]=matrix[i-1][j]+c;
+           }
+         else if(matrix[i-1][i-1]-matrix[i-2][i-2]==b[i-1]&&c==a[i])
+           {
+              matrix[i][j]=matrix[i-1][j];
+           }
+         else if(matrix[i-1][i-1]-matrix[i-2][i-2]==a[i-1]&&c==b[i])
+           {
+              matrix[i][j]=matrix[i-1][j];
+           }
+         else if(matrix[i-1][i-1]-matrix[i-2][i-2]==0)
+           {
+              matrix[i][j]=matrix[i-1][j]+c;
+           }
+       }
+       else if(i>j)
+       {
+         matrix[i][j]=matrix[i-1][j];
+       }
+       else if(i<j)
+       {
+         matrix[i][j]=matrix[i][j-1];
+       }
+     }       
+  }
+  print(matrix,n,count);
+}
+
+void input(int a[50],int b[50],int n)
+{
+ int i;
+ printf("Enter the output of machine A\n");
+ for(i=1;i<=n;i++)
+ {
+  scanf("%d",&a[i]);
+ }
+ printf("Enter the output of machine B\n");
+ for(i=1;i<=n;i++)
+ {
+  scanf("%d",&b[i]);
+ }
+}
+void print(int matrix[50][50],int n,int count)
+{
+ int i,j,s;
+ printf("The matrix is\n");
+ for(i=0;i<=n;i++)
+ {
+  for(j=0;j<=n;j++)
+  {
+  printf("%d ",matrix[i][j]);
+  }
+  printf("\n");
+ }
+ printf("Optimal solution is %d\n",matrix[n][n]);
+ printf("Composition is ");
+ comp(matrix,n);
+ printf("\n Zero indicates the change of machine \n");
+}
+void init(int matrix[50][50],int n)
+{
+int i;
+for(i=0;i<=n;i++)
+ {
+  matrix[0][i]=0;
+  matrix[i][0]=0;
+ }
+}
+int max(int a[50],int b[50],int i)
+{
+ if(a[i]>b[i])
+ {
+  return a[i];
+ }
+ else 
+ {
+  return b[i];
+ }
+}
+void comp(int matrix[50][50],int n)
+{
+  int a;
+  if(matrix[n][n]>=matrix[n][n-1]&&n>0)
+  {
+   a=matrix[n][n]-matrix[n][n-1];
+   printf("%d ",a);
+   n--;
+   comp(matrix,n);
+  }
+}
+
